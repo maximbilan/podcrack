@@ -6,10 +6,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, Tuple
 
-from podpulp.scanner import SQLITE_DB
+from podcrack.scanner import SQLITE_DB
 
 if TYPE_CHECKING:
-    from podpulp.models import Transcript
+    from podcrack.models import Transcript
 
 
 def get_transcript_identifier(ttml_file_path: Path) -> str:

@@ -9,15 +9,15 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
-from podpulp.models import Transcript
+from podcrack.models import Transcript
 
 console = Console()
 
 
 def print_banner():
-    """Print the PodPulp banner."""
+    """Print the podcrack banner."""
     banner = """
-🍎 PodPulp — Apple Podcast Transcript Extractor
+🍎 podcrack — Apple Podcast Transcript Extractor
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
     console.print(banner, style="bold cyan")

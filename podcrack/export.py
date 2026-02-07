@@ -10,7 +10,7 @@ try:
 except ImportError:
     pyperclip = None
 
-from podpulp.models import Transcript
+from podcrack.models import Transcript
 
 
 def copy_to_clipboard(text: str) -> bool:

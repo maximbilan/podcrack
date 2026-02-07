@@ -41,4 +41,4 @@ fi
 
 # Run
 echo ""
-python -m podpulp "$@"
+python -m podcrack "$@"

@@ -1,4 +1,4 @@
-# PodPulp — Apple Podcast Transcript Extractor
+# podcrack — Apple Podcast Transcript Extractor
 
 Extract and export full transcripts from Apple Podcasts' locally cached TTML files on macOS. Bypass Apple's 200-word copy limit and get complete transcripts with timestamps.
 
@@ -29,7 +29,7 @@ The script will:
 1. Check for Python 3.10+
 2. Create a virtual environment (if needed)
 3. Install dependencies (if needed)
-4. Launch PodPulp
+4. Launch podcrack
 
 ## How It Works
 
@@ -45,7 +45,7 @@ Apple Podcasts caches transcript files locally when you view them in the app:
   ~/Library/Group Containers/243LU875E5.groups.com.apple.podcasts/Documents/MTLibrary.sqlite
   ```
 
-PodPulp reads these files (read-only) to extract and display transcripts.
+podcrack reads these files (read-only) to extract and display transcripts.
 
 ## Usage
 
@@ -66,7 +66,7 @@ PodPulp reads these files (read-only) to extract and display transcripts.
 ```
 $ ./run.sh
 
-🍎 PodPulp — Apple Podcast Transcript Extractor
+🍎 podcrack — Apple Podcast Transcript Extractor
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Found 47 transcripts.
@@ -96,10 +96,10 @@ Choice: b
 ## Project Structure
 
 ```
-podpulp/
+podcrack/
 ├── run.sh                # One-command setup & run script
 ├── requirements.txt      # Pinned dependencies
-├── podpulp/
+├── podcrack/
 │   ├── __init__.py
 │   ├── main.py          # Entry point, CLI flow
 │   ├── scanner.py        # Scan TTML directory, discover files
@@ -124,7 +124,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Run
-python -m podpulp
+python -m podcrack
 ```
 
 ## Troubleshooting
@@ -146,7 +146,7 @@ Make sure you have read access to `~/Library/Group Containers/`. On macOS, this 
 
 ### SQLite database not found
 
-If the metadata database isn't available, PodPulp will fall back to using filenames for episode titles. The app will still work, but episode metadata (podcast name, publish date) may be missing.
+If the metadata database isn't available, podcrack will fall back to using filenames for episode titles. The app will still work, but episode metadata (podcast name, publish date) may be missing.
 
 ## Technical Details
 
@@ -169,6 +169,6 @@ See LICENSE file.
 
 ## Notes
 
-- **Read-only access**: PodPulp never modifies Apple Podcasts files
+- **Read-only access**: podcrack never modifies Apple Podcasts files
 - **macOS only**: This tool is designed specifically for macOS
 - **Privacy**: All processing is local — no data is sent anywhere

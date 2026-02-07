@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import List, Optional
 from xml.etree import ElementTree as ET
 
-from podpulp.models import Segment, Transcript
+from podcrack.models import Segment, Transcript
 
 
 # TTML namespace

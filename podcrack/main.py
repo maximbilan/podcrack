@@ -1,4 +1,4 @@
-"""Main entry point for PodPulp CLI."""
+"""Main entry point for podcrack CLI."""
 
 import sys
 from pathlib import Path
@@ -7,7 +7,7 @@ from typing import List, Optional
 import questionary
 from rich.console import Console
 
-from podpulp.display import (
+from podcrack.display import (
     display_transcript,
     print_banner,
     print_error,
@@ -15,11 +15,11 @@ from podpulp.display import (
     print_success,
     print_transcript_list,
 )
-from podpulp.export import copy_to_clipboard, save_to_file
-from podpulp.metadata import enrich_transcript_metadata
-from podpulp.models import Transcript
-from podpulp.parser import parse_ttml
-from podpulp.scanner import check_sqlite_db_exists, scan_ttml_files
+from podcrack.export import copy_to_clipboard, save_to_file
+from podcrack.metadata import enrich_transcript_metadata
+from podcrack.models import Transcript
+from podcrack.parser import parse_ttml
+from podcrack.scanner import check_sqlite_db_exists, scan_ttml_files
 
 console = Console()
 
