@@ -1,69 +1,56 @@
 # Homebrew Installation Guide
 
-This guide explains how to set up podcrack as a Homebrew formula.
+This guide explains how to install podcrack via Homebrew. The formula is included directly in this repository, so no separate tap repository is needed.
 
-## Option 1: Create a Homebrew Tap (Recommended)
+## Option 1: Direct Installation (Recommended)
 
-A Homebrew tap is a separate GitHub repository that contains your formula. This is the standard way to distribute personal or third-party formulas.
+Install directly from this repository using the formula URL:
 
-### Step 1: Create the Tap Repository
-
-1. Create a new GitHub repository named `homebrew-podcrack` (or `homebrew-tap` if you want to host multiple formulas)
-2. Clone it locally:
-   ```bash
-   git clone git@github.com:maximbilan/homebrew-podcrack.git
-   cd homebrew-podcrack
-   ```
-
-### Step 2: Add the Formula
-
-1. Copy the formula file:
-   ```bash
-   mkdir -p Formula
-   cp /path/to/podcrack/Formula/podcrack.rb Formula/
-   ```
-
-2. Update the SHA256 hash in the formula:
-   - First, create a GitHub release with tag `v1.0.0`:
-     ```bash
-     cd /path/to/podcrack
-     git tag v1.0.0
-     git push origin v1.0.0
-     ```
-   - Then create a release on GitHub (https://github.com/maximbilan/podcrack/releases/new)
-   - Download the tarball and calculate its SHA256:
-     ```bash
-     curl -L https://github.com/maximbilan/podcrack/archive/refs/tags/v1.0.0.tar.gz | shasum -a 256
-     ```
-   - Update the `sha256` field in `Formula/podcrack.rb` with this value
-
-3. Commit and push:
-   ```bash
-   git add Formula/podcrack.rb
-   git commit -m "Add podcrack formula"
-   git push origin main
-   ```
-
-### Step 3: Install from Tap
-
-Users can now install podcrack with:
 ```bash
-brew tap maximbilan/podcrack
+brew install --formula https://raw.githubusercontent.com/maximbilan/podcrack/main/Formula/podcrack.rb
+```
+
+This is the simplest method and doesn't require any additional setup.
+
+## Option 2: Tap This Repository (Advanced)
+
+If you want to tap this repository, note that Homebrew typically expects tap repositories to be named `homebrew-*`. However, you can try:
+
+```bash
+brew tap maximbilan/podcrack https://github.com/maximbilan/podcrack.git
 brew install podcrack
 ```
 
-Or in one command:
-```bash
-brew install maximbilan/podcrack/podcrack
-```
+The direct URL installation (Option 1) is recommended as it's more reliable.
 
-## Option 2: Install from Local Formula
+## Option 3: Install from Local Formula
 
-For testing, you can install directly from the local formula:
+For testing or development, you can install directly from a local formula file:
 
 ```bash
 brew install --build-from-source /path/to/podcrack/Formula/podcrack.rb
 ```
+
+## Updating the Formula
+
+When you release a new version:
+
+1. Create a new git tag (e.g., `v1.1.0`) and push it:
+   ```bash
+   git tag v1.1.0
+   git push origin v1.1.0
+   ```
+
+2. Create a GitHub release for the tag
+
+3. Update the `url` and `sha256` in `Formula/podcrack.rb`:
+   - Calculate the new SHA256:
+     ```bash
+     curl -L https://github.com/maximbilan/podcrack/archive/refs/tags/v1.1.0.tar.gz | shasum -a 256
+     ```
+   - Update the formula file with the new version and SHA256
+
+4. Commit and push the changes to this repository
 
 ## Updating the Formula
 
@@ -89,11 +76,19 @@ The formula:
 If you get a SHA256 mismatch error:
 1. Make sure the GitHub release tarball URL is correct
 2. Recalculate the SHA256: `curl -L <url> | shasum -a 256`
-3. Update the formula
+3. Update the formula in this repository
 
 ### Installation Issues
 
 If installation fails:
 - Check that Python 3.10+ is available: `python3 --version`
-- Try installing with verbose output: `brew install -v podcrack`
-- Check Homebrew logs: `brew install --debug podcrack`
+- Try installing with verbose output: `brew install -v --formula <url>`
+- Check Homebrew logs: `brew install --debug --formula <url>`
+- Make sure you're using the latest formula from the main branch
+
+### Formula Not Found
+
+If Homebrew can't find the formula:
+- Ensure you're using the correct URL format
+- Check that the `Formula/podcrack.rb` file exists in the main branch
+- Try the direct URL installation method instead of tapping

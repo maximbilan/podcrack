@@ -119,17 +119,13 @@ podcrack/
 
 ### Homebrew (Recommended)
 
-Install via Homebrew:
+Install directly from this repository (no separate tap repository needed):
 
 ```bash
-brew tap maximbilan/podcrack
-brew install podcrack
+brew install --formula https://raw.githubusercontent.com/maximbilan/podcrack/main/Formula/podcrack.rb
 ```
 
-Or in one command:
-```bash
-brew install maximbilan/podcrack/podcrack
-```
+The formula is included directly in this repository, so you can install it without needing a separate `homebrew-podcrack` repository.
 
 ### Manual Installation
 
