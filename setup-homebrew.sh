@@ -1,81 +1,86 @@
 #!/bin/bash
-# Setup script for creating a Homebrew tap for podcrack
+# Helper script for updating the Homebrew formula in this repository
 
 set -e
 
-TAP_NAME="homebrew-podcrack"
 GITHUB_USER="maximbilan"
 REPO_NAME="podcrack"
+FORMULA_FILE="Formula/podcrack.rb"
 
-echo "🍺 Setting up Homebrew tap for podcrack"
+echo "🍺 Homebrew Formula Helper"
+echo ""
+echo "This script helps update the formula SHA256 when releasing a new version."
+echo "The formula is included directly in this repository - no separate tap needed!"
 echo ""
 
-# Check if tap repo already exists locally
-if [ -d "../$TAP_NAME" ]; then
-    echo "⚠️  Tap directory already exists: ../$TAP_NAME"
-    read -p "Continue anyway? (y/n) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
+# Get current version from formula
+CURRENT_VERSION=$(grep -E '^\s*url.*tags/v' "$FORMULA_FILE" | sed -E 's/.*tags\/v([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+
+if [ -z "$CURRENT_VERSION" ]; then
+    echo "⚠️  Could not detect current version from formula"
+    CURRENT_VERSION="unknown"
+else
+    echo "📋 Current version in formula: v$CURRENT_VERSION"
 fi
 
-# Create tap directory structure
-TAP_DIR="../$TAP_NAME"
-mkdir -p "$TAP_DIR/Formula"
+echo ""
+read -p "Enter new version tag (e.g., 1.1.0) or press Enter to update SHA256 for current version: " NEW_VERSION
 
-# Copy formula
-echo "📋 Copying formula..."
-cp Formula/podcrack.rb "$TAP_DIR/Formula/"
+if [ -z "$NEW_VERSION" ]; then
+    VERSION="$CURRENT_VERSION"
+    echo "Updating SHA256 for v$VERSION..."
+else
+    VERSION="$NEW_VERSION"
+    echo "Updating formula for v$VERSION..."
+fi
 
-# Check if we need to create a git tag
-if ! git tag -l | grep -q "^v1.0.0$"; then
+# Check if tag exists locally
+if ! git tag -l | grep -q "^v$VERSION$"; then
     echo ""
-    echo "⚠️  Git tag v1.0.0 not found."
-    read -p "Create tag v1.0.0 now? (y/n) " -n 1 -r
+    echo "⚠️  Git tag v$VERSION not found locally."
+    read -p "Create tag v$VERSION now? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        git tag v1.0.0
-        echo "✅ Created tag v1.0.0"
-        echo "   Don't forget to push it: git push origin v1.0.0"
+        git tag "v$VERSION"
+        echo "✅ Created tag v$VERSION"
+        echo "   Don't forget to push it: git push origin v$VERSION"
     fi
 fi
 
-# Calculate SHA256 if tag exists
-if git tag -l | grep -q "^v1.0.0$"; then
-    echo ""
-    echo "📦 Calculating SHA256 for release tarball..."
-    TARBALL_URL="https://github.com/$GITHUB_USER/$REPO_NAME/archive/refs/tags/v1.0.0.tar.gz"
-    SHA256=$(curl -sL "$TARBALL_URL" | shasum -a 256 | awk '{print $1}')
-    
-    if [ -n "$SHA256" ]; then
-        echo "✅ SHA256: $SHA256"
-        echo ""
-        echo "Updating formula with SHA256..."
-        sed -i '' "s/sha256 \"\"/sha256 \"$SHA256\"/" "$TAP_DIR/Formula/podcrack.rb"
-        echo "✅ Formula updated"
-    else
-        echo "⚠️  Could not calculate SHA256. Make sure the GitHub release exists."
-        echo "   You'll need to update the sha256 field manually in Formula/podcrack.rb"
-    fi
+# Calculate SHA256
+echo ""
+echo "📦 Calculating SHA256 for release tarball..."
+TARBALL_URL="https://github.com/$GITHUB_USER/$REPO_NAME/archive/refs/tags/v$VERSION.tar.gz"
+SHA256=$(curl -sL "$TARBALL_URL" | shasum -a 256 | awk '{print $1}')
+
+if [ -z "$SHA256" ] || [ "$SHA256" = "" ]; then
+    echo "⚠️  Could not calculate SHA256. Make sure:"
+    echo "   1. The tag v$VERSION exists on GitHub: git push origin v$VERSION"
+    echo "   2. A GitHub release exists for v$VERSION"
+    echo "   3. The tarball URL is accessible: $TARBALL_URL"
+    exit 1
 fi
+
+echo "✅ SHA256: $SHA256"
+
+# Update formula
+if [ "$VERSION" != "$CURRENT_VERSION" ]; then
+    # Update version in URL
+    sed -i '' "s|url \".*tags/v.*\.tar\.gz\"|url \"https://github.com/$GITHUB_USER/$REPO_NAME/archive/refs/tags/v$VERSION.tar.gz\"|" "$FORMULA_FILE"
+    echo "✅ Updated URL to v$VERSION"
+fi
+
+# Update SHA256
+sed -i '' "s/sha256 \"[^\"]*\"/sha256 \"$SHA256\"/" "$FORMULA_FILE"
+echo "✅ Updated SHA256 in formula"
 
 echo ""
-echo "✅ Setup complete!"
+echo "✅ Formula updated successfully!"
 echo ""
 echo "Next steps:"
-echo "1. Create GitHub repository: $TAP_NAME"
-echo "2. Initialize git in tap directory:"
-echo "   cd $TAP_DIR"
-echo "   git init"
-echo "   git add Formula/podcrack.rb"
-echo "   git commit -m 'Add podcrack formula'"
-echo "   git remote add origin git@github.com:$GITHUB_USER/$TAP_NAME.git"
-echo "   git push -u origin main"
+echo "1. Review the changes: git diff $FORMULA_FILE"
+echo "2. Commit the update: git commit -m 'Update formula to v$VERSION' $FORMULA_FILE"
+echo "3. Push to GitHub: git push"
 echo ""
-echo "3. Create a GitHub release for podcrack (if not already done):"
-echo "   https://github.com/$GITHUB_USER/$REPO_NAME/releases/new"
-echo ""
-echo "4. Users can then install with:"
-echo "   brew tap $GITHUB_USER/podcrack"
-echo "   brew install podcrack"
+echo "Users can then install with:"
+echo "   brew install --formula https://raw.githubusercontent.com/$GITHUB_USER/$REPO_NAME/main/$FORMULA_FILE"
