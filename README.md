@@ -131,6 +131,45 @@ pip install -r requirements.txt
 python -m podcrack
 ```
 
+## Running Tests
+
+The easiest way to run tests is using the test script:
+
+```bash
+# Run all tests
+./test.sh
+
+# Run with coverage
+./test.sh --cov=podcrack --cov-report=html
+
+# Run specific test file
+./test.sh tests/test_parser.py
+
+# Run specific test
+./test.sh tests/test_parser.py::TestParseTimestamp::test_hours_minutes_seconds
+
+# Pass any pytest arguments
+./test.sh -v --tb=short
+```
+
+Alternatively, if you've already set up the environment:
+
+```bash
+# Activate virtual environment
+source .venv/bin/activate
+
+# Run all tests
+pytest
+
+# Run with verbose output
+pytest -v
+
+# Run with coverage report
+pytest --cov=podcrack --cov-report=html
+```
+
+The test suite includes 47 tests covering parser, models, scanner, metadata, and export functionality.
+
 ## Troubleshooting
 
 ### "No transcripts found"
