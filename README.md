@@ -2,6 +2,8 @@
 
 Extract and export full transcripts from Apple Podcasts' locally cached TTML files on macOS. Bypass Apple's 200-word copy limit and get complete transcripts with timestamps.
 
+**podcrack** is a Python CLI tool that reads Apple Podcasts' cached transcript files and provides an interactive interface to browse, search, and export full transcripts.
+
 ## Features
 
 - 🔍 **Browse & Search** — Find transcripts by podcast name or episode title
@@ -99,15 +101,17 @@ Choice: b
 podcrack/
 ├── run.sh                # One-command setup & run script
 ├── requirements.txt      # Pinned dependencies
-├── podcrack/
+├── pyproject.toml        # Package configuration
+├── podcrack/             # Main package
 │   ├── __init__.py
+│   ├── __main__.py       # Module entry point
 │   ├── main.py          # Entry point, CLI flow
 │   ├── scanner.py        # Scan TTML directory, discover files
 │   ├── parser.py         # Parse TTML XML into transcript objects
 │   ├── metadata.py       # Query SQLite DB for episode metadata
 │   ├── display.py        # Rich-based terminal rendering
 │   ├── export.py         # Clipboard copy, file save
-│   └── models.py         # Dataclasses for Transcript, Segment, Episode
+│   └── models.py         # Dataclasses for Transcript, Segment
 └── README.md
 ```
 
