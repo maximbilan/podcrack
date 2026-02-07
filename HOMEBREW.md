@@ -2,28 +2,28 @@
 
 This guide explains how to install podcrack via Homebrew. The formula is included directly in this repository, so no separate tap repository is needed.
 
-## Option 1: Direct Installation (Recommended)
+## Option 1: Tap and Install (Recommended)
 
-Install directly from this repository using the formula URL:
-
-```bash
-brew install --formula https://raw.githubusercontent.com/maximbilan/podcrack/main/Formula/podcrack.rb
-```
-
-This is the simplest method and doesn't require any additional setup.
-
-## Option 2: Tap This Repository (Advanced)
-
-If you want to tap this repository, note that Homebrew typically expects tap repositories to be named `homebrew-*`. However, you can try:
+Tap this repository and install:
 
 ```bash
 brew tap maximbilan/podcrack https://github.com/maximbilan/podcrack.git
 brew install podcrack
 ```
 
-The direct URL installation (Option 1) is recommended as it's more reliable.
+After tapping once, you can use `brew install podcrack` and `brew upgrade podcrack` normally.
 
-## Option 3: Install from Local Formula
+## Option 2: Direct Formula Installation
+
+Install directly from the formula URL without tapping:
+
+```bash
+brew install --formula https://raw.githubusercontent.com/maximbilan/podcrack/main/Formula/podcrack.rb
+```
+
+This method doesn't add a tap, but you'll need to use the full URL for upgrades.
+
+## Option 3: Install from Local Formula (Development)
 
 For testing or development, you can install directly from a local formula file:
 
