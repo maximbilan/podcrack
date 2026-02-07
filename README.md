@@ -115,7 +115,23 @@ podcrack/
 └── README.md
 ```
 
-## Installation (Manual)
+## Installation
+
+### Homebrew (Recommended)
+
+Install via Homebrew:
+
+```bash
+brew tap maximbilan/podcrack
+brew install podcrack
+```
+
+Or in one command:
+```bash
+brew install maximbilan/podcrack/podcrack
+```
+
+### Manual Installation
 
 If you prefer to set up manually:
 
