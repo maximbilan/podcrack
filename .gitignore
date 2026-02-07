@@ -138,6 +138,7 @@ celerybeat.pid
 .env
 .envrc
 .venv
+.deps_installed
 env/
 venv/
 ENV/
