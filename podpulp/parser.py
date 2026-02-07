@@ -43,12 +43,12 @@ def parse_timestamp(timestamp_str: str) -> float:
 def extract_text_from_element(elem: ET.Element) -> str:
     """
     Extract and concatenate all text from an element and its children.
-    
+
     This recursively traverses all nested <span> elements to extract text,
     matching the approach used by Apple Podcasts TTML files.
     """
     text_parts = []
-    
+
     def collect_text(e):
         """Recursively collect text from element and all descendants."""
         # Get direct text content
@@ -60,9 +60,9 @@ def extract_text_from_element(elem: ET.Element) -> str:
         # Get tail text (text after this element, before next sibling)
         if e.tail and e.tail.strip():
             text_parts.append(e.tail.strip())
-    
+
     collect_text(elem)
-    
+
     # Join and normalize whitespace
     text = " ".join(text_parts)
     # Replace multiple spaces/newlines with single space

@@ -47,7 +47,7 @@ def print_transcript_list(transcripts: List[Transcript], page: int = 1, per_page
     for idx, transcript in enumerate(page_transcripts, start=start_idx + 1):
         podcast = transcript.podcast_name or "Unknown"
         episode = transcript.episode_title or transcript.file_path.stem
-        
+
         if transcript.publish_date:
             date_str = transcript.publish_date.strftime("%Y-%m-%d")
         else:
@@ -56,7 +56,7 @@ def print_transcript_list(transcripts: List[Transcript], page: int = 1, per_page
                 date_str = datetime.fromtimestamp(mtime).strftime("%Y-%m-%d")
             except (OSError, ValueError):
                 date_str = "Unknown"
-        
+
         duration = transcript.duration_formatted
 
         table.add_row(str(idx), podcast, episode, date_str, duration)

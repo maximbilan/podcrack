@@ -15,24 +15,24 @@ if TYPE_CHECKING:
 def get_transcript_identifier(ttml_file_path: Path) -> str:
     """
     Extract the transcript identifier (relative path) from a TTML file path.
-    
+
     This matches the format stored in ZTRANSCRIPTIDENTIFIER in the database.
     Example: PodcastContent221/v4/f4/df/8a/f4df8a4a-9adb-ecf7-1325-fa148c876490/transcript_1000746774876.ttml
-    
+
     The filename may have a duplicate pattern like transcript_123.ttml-123.ttml
     which should be normalized to transcript_123.ttml
     """
     # Get relative path from TTML base directory
     ttml_base = Path.home() / "Library/Group Containers/243LU875E5.groups.com.apple.podcasts/Library/Cache/Assets/TTML"
-    
+
     try:
         relative_path = ttml_file_path.relative_to(ttml_base)
         identifier = str(relative_path)
-        
+
         # Handle duplicate filename pattern (e.g., transcript_123.ttml-123.ttml -> transcript_123.ttml)
         # Match pattern: anything.ttml-number.ttml at the end
         identifier = re.sub(r"(.+\.ttml)-\d+\.ttml$", r"\1", identifier)
-        
+
         return identifier
     except ValueError:
         # If path is not relative to base, return just the filename (also handle duplicate pattern)
@@ -112,18 +112,18 @@ def get_episode_metadata(ttml_file_path: Path) -> Tuple[Optional[str], Optional[
             conn = sqlite3.connect(str(SQLITE_DB))
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
-            
+
             # Check if tables exist
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('ZMTEPISODE', 'ZMTPODCAST')")
             tables = [row[0] for row in cursor.fetchall()]
-            
+
             if "ZMTEPISODE" not in tables or "ZMTPODCAST" not in tables:
                 conn.close()
                 return None, None, None
-            
+
             # Try alternative column names
             transcript_identifier = get_transcript_identifier(ttml_file_path)
-            
+
             # Try with ZCLEANEDTITLE instead of ZTITLE for podcast
             query = """
             SELECT
@@ -136,15 +136,15 @@ def get_episode_metadata(ttml_file_path: Path) -> Tuple[Optional[str], Optional[
             WHERE e.ZTRANSCRIPTIDENTIFIER = ?
             LIMIT 1
             """
-            
+
             cursor.execute(query, (transcript_identifier,))
             row = cursor.fetchone()
-            
+
             if row:
                 episode_title = row["episode_title"] if row["episode_title"] else None
                 podcast_name = row["podcast_title"] if row["podcast_title"] else None
                 publish_date = None
-                
+
                 if row["ZPUBDATE"]:
                     try:
                         base_date = datetime(2001, 1, 1)
@@ -153,13 +153,13 @@ def get_episode_metadata(ttml_file_path: Path) -> Tuple[Optional[str], Optional[
                             publish_date = datetime.fromtimestamp(base_date.timestamp() + timestamp)
                     except (ValueError, TypeError, OSError):
                         pass
-                
+
                 conn.close()
                 return podcast_name, episode_title, publish_date
-            
+
             conn.close()
             return None, None, None
-            
+
         except Exception:
             return None, None, None
 

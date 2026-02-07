@@ -31,10 +31,10 @@ def scan_ttml_files() -> List[Path]:
 
     # Recursively search for .ttml files in subdirectories
     ttml_files = list(TTML_DIR.rglob("*.ttml"))
-    
+
     # Filter out any non-file entries (shouldn't happen, but be safe)
     ttml_files = [f for f in ttml_files if f.is_file()]
-    
+
     # Sort by modification time, newest first
     ttml_files.sort(key=lambda p: p.stat().st_mtime, reverse=True)
 

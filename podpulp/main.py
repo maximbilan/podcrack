@@ -189,7 +189,7 @@ def main():
             # Check if selection is within current page range
             start_idx = (current_page - 1) * per_page
             end_idx = min(start_idx + per_page, len(filtered))
-            
+
             if 1 <= selection <= len(filtered):
                 # Map selection to actual index in filtered list
                 selected_transcript = filtered[selection - 1]
