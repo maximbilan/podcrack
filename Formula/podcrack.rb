@@ -2,7 +2,7 @@ class Podcrack < Formula
   desc "Apple Podcast Transcript Extractor"
   homepage "https://github.com/maximbilan/podcrack"
   url "https://github.com/maximbilan/podcrack/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "66f6d7f159d421aab2878c27b350bfd9c16971361d18863664d22247608a1d55"
+  sha256 "f70aa6ac184187548113afc9389de88a33caffa13e67a6d549789a7ae352091a"
   license "MIT"
   head "https://github.com/maximbilan/podcrack.git", branch: "main"
 
